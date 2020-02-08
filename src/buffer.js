@@ -17,6 +17,7 @@ function byteToHex(byte) {
     return ('0' + (byte & 0xFF).toString(16)).slice(-2);
 }
 
+
 /**
  *
  * Converts a hex string into a buffer
@@ -33,17 +34,33 @@ export function fromHex(hexString) {
     return new Uint8Array(result)
 }
 
+
 /**
  *
  * Converts a buffer into a BigInt
  *
- * @param {Uint8Array} buffer The buffer
- * @return {BigInt} The BigInt
+ * @param {Uint8Array} buffer -  The buffer to convert
+ * @return {BigInt} The converted BigInt
  *
  */
 export function toBigInt(buffer) {
     return BigInt('0x' + toHex(buffer));
 }
+
+
+/**
+ *
+ * Converts a BigInt into a buffer
+ *
+ * @param {BigInt} integer - The BigInt to convert
+ * @return {Uint8Array} - The converted buffer
+ *
+ */
+export function fromBigInt(integer) {
+    var hex = BigInt(integer).toString(16);
+    if (hex.length % 2) { hex = '0' + hex; }
+}
+
 
 /**
  *
@@ -58,6 +75,7 @@ export function toUnicode(buffer, encoding = 'utf-8') {
     const decoder = new TextDecoder(encoding);
     return decoder.decode(buffer);
 }
+
 
 /**
  *
@@ -86,6 +104,7 @@ export function toBase64(buffer) {
     return btoa(String.fromCharCode(...new Uint8Array(buffer)));
 }
 
+
 /**
  *
  * Converts a Base64 string into a buffer
@@ -98,6 +117,7 @@ export function fromBase64(string) {
     return Uint8Array.from(atob(string), c => c.charCodeAt(0));
 }
 
+
 /**
  *
  * Converts a buffer into a Base64 string. Then it replaces plus and slashes.
@@ -109,6 +129,7 @@ export function fromBase64(string) {
 export function toBase64Clean(buffer) {
     return Buffer.toBase64(buffer).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
 }
+
 
 /**
  *
@@ -133,6 +154,7 @@ function concatTypedArrays(a, b) {
     return c;
 }
 
+
 /**
  *
  * Checks if two buffers are equal
@@ -150,4 +172,17 @@ export function equals(a, b) {
         if (viewA[i] !== viewB[i]) return false;
     }
     return true;
+}
+
+
+/**
+ *
+ * Returns an array of secure random bytes.
+ *
+ * @param {number} n - The number of bytes to return
+ * @return {Uint8Array} - The random bytes
+ *
+ */
+export function randomBytes(n){
+    return crypto.getRandomValues(new Uint8Array(n));
 }
