@@ -2,11 +2,14 @@
  *
  * Converts a buffer into a hex string
  *
- * @param {Uint8Array} buffer The buffer
+ * @param {Uint8Array|ArrayBuffer} buffer The buffer
  * @return {String} The hex string
  *
  */
 export function toHex(buffer) {
+    if (buffer instanceof ArrayBuffer) {
+        buffer = new Uint8Array(buffer);
+    }
     return Array.prototype.map.call(buffer, byteToHex).join('');
 }
 
