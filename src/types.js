@@ -148,6 +148,41 @@ class Hash extends Buffer {
 }
 
 
+
+
+
+class Buffer {
+
+    constructor(buffer) {
+        this._buffer = buffer;
+        this._hex = this.toHex()
+    }
+
+    static fromHex(hexString) {
+        return new this.prototype.constructor(hexToBuffer(hexString))
+    }
+
+    toHex() {
+        return bufferToHex(this._buffer);
+    }
+
+    byteLength() {
+        return this._buffer.byteLength
+    }
+
+    write(writer) {
+        writer.writeBytes(this._buffer);
+    }
+
+
+    toBigInt() {
+        return BigInt('0x' + this.toHex());
+    }
+
+
+}
+
+
 class Writer {
 
     constructor(buffer, mode) {

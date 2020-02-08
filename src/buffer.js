@@ -1,12 +1,28 @@
+/**
+ *
+ * Converts a buffer into a hex string
+ *
+ * @param {Uint8Array} buffer The buffer
+ * @return {String} The hex string
+ *
+ */
+export function toHex(buffer) {
+    return Array.prototype.map.call(buffer, byteToHex).join('');
+}
+
 function byteToHex(byte) {
     return ('0' + (byte & 0xFF).toString(16)).slice(-2);
 }
 
-function bufferToHex(buffer) {
-    return Array.prototype.map.call(buffer, byteToHex).join('');
-}
-
-function hexToBuffer(hexString) {
+/**
+ *
+ * Converts a hex string into a buffer
+ *
+ * @param {String} hexString The hex string
+ * @return {Uint8Array} The buffer
+ *
+ */
+export function fromHex(hexString) {
     let result = [];
     for (let i = 0; i < hexString.length; i += 2) {
         result.push(parseInt(hexString.substr(i, 2), 16));
@@ -14,63 +30,121 @@ function hexToBuffer(hexString) {
     return new Uint8Array(result)
 }
 
-function bufferToBigInt(buffer) {
-    return BigInt('0x' + bufferToHex(buffer));
+/**
+ *
+ * Converts a buffer into a BigInt
+ *
+ * @param {Uint8Array} buffer The buffer
+ * @return {BigInt} The BigInt
+ *
+ */
+export function toBigInt(buffer) {
+    return BigInt('0x' + toHex(buffer));
 }
 
-class Buffer {
+/**
+ *
+ * Converts a buffer into a Unicode string
+ *
+ * @param {Uint8Array} buffer - The buffer
+ * @param {string} [encoding='utf-8'] - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
+ * @return {String} - The Unicode string
+ *
+ */
+export function toUnicode(buffer, encoding = 'utf-8') {
+    const decoder = new TextDecoder(encoding);
+    return decoder.decode(buffer);
+}
 
-    constructor(buffer) {
-        this._buffer = buffer;
-        this._hex = this.toHex()
-    }
+/**
+ *
+ * Converts a Unicode string into a buffer
+ *
+ * @param {String} string The hex string
+ * @param {string} [encoding='utf-8'] - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
+ * @return {Uint8Array} The buffer
+ *
+ */
+export function fromUnicode(string, encoding = 'utf-8') {
+    const encoder = new TextEncoder(encoding);
+    return encoder.encode(string);
+}
 
-    static fromHex(hexString) {
-        return new this.prototype.constructor(hexToBuffer(hexString))
-    }
 
-    toHex() {
-        return bufferToHex(this._buffer);
-    }
+/**
+ *
+ * Converts a buffer into a Base64 string
+ *
+ * @param {Uint8Array} buffer The buffer
+ * @return {String} The Base64 string
+ *
+ */
+export function toBase64(buffer) {
+    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+}
 
-    byteLength() {
-        return this._buffer.byteLength
-    }
+/**
+ *
+ * Converts a Base64 string into a buffer
+ *
+ * @param {String} string The Base64 string
+ * @return {Uint8Array} The buffer
+ *
+ */
+export function fromBase64(string) {
+    return Uint8Array.from(atob(string), c => c.charCodeAt(0));
+}
 
-    write(writer) {
-        writer.writeBytes(this._buffer);
-    }
+/**
+ *
+ * Converts a buffer into a Base64 string. Then it replaces plus and slashes.
+ *
+ * @param {Uint8Array} buffer The buffer
+ * @return {String} The Base64 string
+ *
+ */
+export function toBase64Clean(buffer) {
+    return Buffer.toBase64(buffer).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
+}
 
-    toUnicode(encoding = 'utf-8') {
-        const decoder = new TextDecoder(encoding);
-        return decoder.decode(this._buffer.slice(0).reverse());
-    }
+/**
+ *
+ * Concatenates two buffers
+ *
+ * @param {Uint8Array} a The first buffer
+ * @param {Uint8Array} b The second buffer
+ * @return {ArrayBuffer} The concatenated buffer
+ *
+ */
+export function concat(a, b) {
+    return concatTypedArrays(
+        new Uint8Array(a._buffer || a),
+        new Uint8Array(b._buffer || b)
+    ).buffer;
+}
 
-    toBigInt() {
-        return BigInt('0x' + this.toHex());
-    }
+function concatTypedArrays(a, b) {
+    const c = new(a.constructor)(a.length + b.length);
+    c.set(a, 0);
+    c.set(b, a.length);
+    return c;
+}
 
-    static concatTypedArrays(a, b) {
-        const c = new(a.constructor)(a.length + b.length);
-        c.set(a, 0);
-        c.set(b, a.length);
-        return c;
+/**
+ *
+ * Checks if two buffers are equal
+ *
+ * @param {Uint8Array} a The first buffer
+ * @param {Uint8Array} b The second buffer
+ * @return {Boolean} Result of the comparison
+ *
+ */
+export function equals(a, b) {
+    const viewA = new Uint8Array(a._buffer || a);
+    const viewB = new Uint8Array(b._buffer || b);
+    if (viewA.byteLength !== viewB.byteLength) return false;
+    for (let i = 0; i < viewA.byteLength; i++) {
+        if (viewA[i] !== viewB[i]) return false;
     }
-
-    static concat(a, b) {
-        return Buffer.concatTypedArrays(
-            new Uint8Array(a._buffer || a),
-            new Uint8Array(b._buffer || b)
-        ).buffer;
-    }
-
-    static equals(a, b) {
-        const viewA = new Uint8Array(a._buffer || a);
-        const viewB = new Uint8Array(b._buffer || b);
-        if (viewA.byteLength !== viewB.byteLength) return false;
-        for (let i = 0; i < viewA.byteLength; i++) {
-            if (viewA[i] !== viewB[i]) return false;
-        }
-        return true;
-    }
+    return true;
 }
