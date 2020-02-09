@@ -1,11 +1,10 @@
 import * as Utils from './buffer-utils.js';
 
-
 /**
-    
-*/ 
+ * Convenience class for byte arrays
+*/
 export class Buffer extends Uint8Array {
-    
+
     /**
      * 
      * Creates a Buffer.
@@ -68,4 +67,29 @@ export class Buffer extends Uint8Array {
         return new this.prototype.constructor(Utils.fromBigInt(integer))
     }
 
+    /**
+     *
+     * Converts a Buffer into a Unicode string
+     *
+     * @param {Uint8Array} buffer - The buffer
+     * @param {string} [encoding='utf-8'] - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
+     * @return {String} - The Unicode string
+     *
+     */
+    toUnicode(buffer, encoding) {
+        return Utils.toUnicode(this, encoding)
+    }
+
+    /**
+     *
+     * Converts a Unicode string into a Buffer
+     *
+     * @param {String} string The hex string
+     * @param {string} [encoding='utf-8'] - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
+     * @return {Uint8Array} The buffer
+     *
+     */
+    static fromUnicode(string, encoding = 'utf-8') {
+        return new this.prototype.constructor(Utils.fromUnicode(string, encoding))
+    }
 }

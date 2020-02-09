@@ -15,10 +15,10 @@ export function toHex(buffer) {
 
 /**
  *
- * Converts one byte into two hex nibbles.
+ * Converts one byte into a string with two hex nibbles.
  *
  * @param {number} byte - The byte.
- * @return {String} The hex string
+ * @return {string} The hex string
  *
  */
 function byteToHex(byte) {

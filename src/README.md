@@ -1,4 +1,4 @@
-# buffer-js
+# buffer.js
 Helper methods for native ArrayBuffers
 
 ## Usage 
