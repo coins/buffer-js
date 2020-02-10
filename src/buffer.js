@@ -2,7 +2,7 @@ import * as Utils from './buffer-utils.js';
 
 /**
  * Convenience class for byte arrays
-*/
+ */
 export class Buffer extends Uint8Array {
 
     /**
@@ -92,4 +92,31 @@ export class Buffer extends Uint8Array {
     static fromUnicode(string, encoding = 'utf-8') {
         return new this.prototype.constructor(Utils.fromUnicode(string, encoding))
     }
+
+
+    /**
+     *
+     * Converts a Buffer into a Base64 string
+     *
+     * @param {Uint8Array} buffer The buffer
+     * @return {String} The Base64 string
+     *
+     */
+    toBase64() {
+        return Utils.toBase64(this)
+    }
+
+
+    /**
+     *
+     * Converts a Base64 string into a Buffer
+     *
+     * @param {String} string The Base64 string
+     * @return {Uint8Array} The buffer
+     *
+     */
+    static fromBase64(string) {
+        return new this.prototype.constructor(Utils.fromBase64(string))
+    }
+
 }
