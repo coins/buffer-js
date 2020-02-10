@@ -1,4 +1,6 @@
-class Uint extends Number {
+import * as Buffer from './buffer-utils.js';
+
+export class Uint extends Number {
 
     constructor(value) {
         super(value);
@@ -25,28 +27,28 @@ class Uint extends Number {
     }
 }
 
-class Uint8 extends Uint {
+export class Uint8 extends Uint {
 
     static get mask() { return Uint8Array; }
 
     static byteLength() { return 1; }
 }
 
-class Uint16 extends Uint {
+export class Uint16 extends Uint {
 
     static get mask() { return Uint16Array; }
 
     static byteLength() { return 2; }
 }
 
-class Uint32 extends Uint {
+export class Uint32 extends Uint {
 
     static get mask() { return Uint32Array; }
 
     static byteLength() { return 4; }
 }
 
-class Uint64 {
+export class Uint64 {
 
     constructor(value) {
         this.value = BigInt(value.value || !(value.value === 0) || value)
@@ -66,7 +68,7 @@ class Uint64 {
     byteLength() { return 8; }
 }
 
-class VarInt extends Number {
+export class VarInt extends Number {
 
     constructor(uint) {
         super(Number(uint))
@@ -122,79 +124,75 @@ class VarInt extends Number {
 
 
 
+export class SerialWriter {
 
+    constructor(buffer, mode) {
+        this._buffer = buffer;
+        this._cursor = 0;
+        this.mode = mode;
+    }
 
+    writeByte(byte) {
+        if (this._cursor >= this._buffer.byteLength)
+            throw new Error('Out of bounds write');
+        this._buffer[this._cursor] = byte;
+        this._cursor += 1;
+    }
 
+    writeBytes(bytes) {
+        bytes = new Uint8Array(bytes);
+        for (let i = 0; i < bytes.length; i++) {
+            this.writeByte(bytes[i])
+        }
+    }
 
-// class Writer {
+    result() {
+        return this._buffer;
+    }
+}
 
-//     constructor(buffer, mode) {
-//         this._buffer = buffer;
-//         this._cursor = 0;
-//         this.mode = mode;
-//     }
+export class HexWriter extends SerialWriter {
 
-//     writeByte(byte) {
-//         if (this._cursor >= this._buffer.byteLength)
-//             throw new Error('Out of bounds write');
-//         this._buffer[this._cursor] = byte;
-//         this._cursor += 1;
-//     }
+    constructor(buffer, mode) {
+        super(buffer, mode);
+        this._hex = '';
+    }
 
-//     writeBytes(bytes) {
-//         bytes = new Uint8Array(bytes);
-//         for (let i = 0; i < bytes.length; i++) {
-//             this.writeByte(bytes[i])
-//         }
-//     }
+    writeByte(byte) {
+        this._hex += byteToHex(byte);
+    }
 
-//     result() {
-//         return this._buffer;
-//     }
-// }
+    result() {
+        return this._hex;
+    }
+}
 
-// class HexWriter extends Writer {
+export class SerialReader {
 
-//     constructor(buffer, mode) {
-//         super(buffer, mode);
-//         this._hex = '';
-//     }
+    constructor(buffer) {
+        this._buffer = buffer._buffer || buffer;
+        this.meta = {};
+    }
 
-//     writeByte(byte) {
-//         this._hex += byteToHex(byte);
-//     }
+    readBytes(n) {
+        if (n > this._buffer.length)
+            throw new Error('Out of bounds read');
+        const res = this._buffer.slice(0, n)
+        this._buffer = this._buffer.slice(n);
+        return res
+    }
 
-//     result() {
-//         return this._hex;
-//     }
-// }
+    isEmpty() {
+        return this._buffer.length == 0;
+    }
 
-// class Reader {
+    bytesRemaining() {
+        return this._buffer.length;
+    }
+}
 
-//     constructor(buffer) {
-//         this._buffer = buffer._buffer || buffer;
-//         this.meta = {};
-//     }
-
-//     readBytes(n) {
-//         if (n > this._buffer.length)
-//             throw new Error('Out of bounds read');
-//         const res = this._buffer.slice(0, n)
-//         this._buffer = this._buffer.slice(n);
-//         return res
-//     }
-
-//     isEmpty() {
-//         return this._buffer.length == 0;
-//     }
-
-//     bytesRemaining() {
-//         return this._buffer.length;
-//     }
-// }
-
-// class HexReader extends Reader {
-//     constructor(hex) {
-//         super(Buffer.fromHex(hex))
-//     }
-// }
+export class HexReader extends SerialReader {
+    constructor(hex) {
+        super(Buffer.fromHex(hex))
+    }
+}
