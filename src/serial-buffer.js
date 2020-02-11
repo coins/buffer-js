@@ -1,4 +1,39 @@
 import * as Buffer from './buffer-utils.js';
+import { SHA256d } from '../../../hash-js/hash.js'
+import { byteToHex } from '../../../buffer-js/src/buffer-utils.js'
+
+export class SerialBuffer {
+
+    static read(reader) {
+        throw 'Error: abstract method'
+    }
+
+    write(writer) {
+        throw 'Error: abstract method'
+    }
+
+    byteLength(){
+        throw 'Error: abstract method'
+    }
+
+    toHex(){
+        const writer = new HexWriter();
+        this.write(writer);
+        return writer.result();
+    }
+
+    static fromHex(hexString){
+        const tx = this.prototype.constructor.read(new HexReader(hexString));
+        return tx;
+    }
+
+    toBuffer(){
+        const buffer = new Uint8Array(this.byteLength());
+        const writer = new SerialWriter(buffer);
+        this.write(writer);
+        return writer.result();
+    }
+}
 
 export class Uint extends Number {
 
@@ -122,7 +157,28 @@ export class VarInt extends Number {
 
 }
 
+export class SerialSHA256d extends SHA256d {
 
+    byteLength() {
+        return this.constructor.byteLength();
+    }
+
+    // toHex() {
+    //     const copy = this.slice(0) //.reverse(); // reverse to fix Satoshi's byte order
+    //     return bufferToHex(copy);
+    // }
+
+    write(writer) {
+        writer.writeBytes(this.slice(0));
+    }
+
+    static read(reader) {
+        const hash = reader.readBytes(this.byteLength());
+        return new SerialSHA256d(hash);
+    }
+
+    static byteLength() { return 32; }
+}
 
 export class SerialWriter {
 
@@ -196,3 +252,5 @@ export class HexReader extends SerialReader {
         super(Buffer.fromHex(hex))
     }
 }
+
+

@@ -21,7 +21,7 @@ export function toHex(buffer) {
  * @return {string} The hex string
  *
  */
-function byteToHex(byte) {
+export function byteToHex(byte) {
     // convert to hex string and pad a zero if necessary
     return ('0' + (byte & 0xFF).toString(16)).slice(-2); 
 }

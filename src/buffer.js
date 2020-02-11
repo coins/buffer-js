@@ -53,7 +53,7 @@ export class Buffer extends Uint8Array {
      * 
      */
     toBigInt() {
-        return Utils.toHex(this)
+        return Utils.toBigInt(this)
     }
 
     /**
@@ -86,7 +86,7 @@ export class Buffer extends Uint8Array {
      *
      * @param {String} string The hex string
      * @param {string} [encoding='utf-8'] - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
-     * @return {Uint8Array} The buffer
+     * @return {Buffer} - The buffer
      *
      */
     static fromUnicode(string, encoding = 'utf-8') {
@@ -99,7 +99,7 @@ export class Buffer extends Uint8Array {
      * Converts a Buffer into a Base64 string
      *
      * @param {Uint8Array} buffer The buffer
-     * @return {String} The Base64 string
+     * @return {String} - The Base64 string
      *
      */
     toBase64() {
@@ -112,11 +112,20 @@ export class Buffer extends Uint8Array {
      * Converts a Base64 string into a Buffer
      *
      * @param {String} string The Base64 string
-     * @return {Uint8Array} The buffer
+     * @return {Buffer} - The buffer
      *
      */
     static fromBase64(string) {
         return new this.prototype.constructor(Utils.fromBase64(string))
     }
 
+    /**
+     *
+     * Returns a copy of this Buffer in reversed order
+     * @return {Buffer} - The buffer
+     *
+     */
+    reverse(){
+        return new this.constructor(super.reverse())
+    }
 }
