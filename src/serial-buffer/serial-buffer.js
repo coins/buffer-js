@@ -1,6 +1,6 @@
-import * as Buffer from './buffer-utils.js';
+import * as Buffer from '../buffer-utils.js';
 import { SHA256d } from '../../../hash-js/hash.js'
-import { byteToHex } from '../../../buffer-js/src/buffer-utils.js'
+import { byteToHex, toHex } from '../../../buffer-js/src/buffer-utils.js'
 
 export class SerialBuffer {
 
@@ -12,22 +12,22 @@ export class SerialBuffer {
         throw 'Error: abstract method'
     }
 
-    byteLength(){
+    byteLength() {
         throw 'Error: abstract method'
     }
 
-    toHex(){
+    toHex() {
         const writer = new HexWriter();
         this.write(writer);
         return writer.result();
     }
 
-    static fromHex(hexString){
+    static fromHex(hexString) {
         const tx = this.prototype.constructor.read(new HexReader(hexString));
         return tx;
     }
 
-    toBuffer(){
+    toBuffer() {
         const buffer = new Uint8Array(this.byteLength());
         const writer = new SerialWriter(buffer);
         this.write(writer);
@@ -83,10 +83,13 @@ export class Uint32 extends Uint {
     static byteLength() { return 4; }
 }
 
-export class Uint64 {
+export class Uint64 extends SerialBuffer {
 
     constructor(value) {
-        this.value = BigInt(value.value || !(value.value === 0) || value)
+        super()
+        if (value instanceof Uint64)
+            value = value.value
+        this.value = value
     }
 
     write(writer) {
@@ -163,10 +166,10 @@ export class SerialSHA256d extends SHA256d {
         return this.constructor.byteLength();
     }
 
-    // toHex() {
-    //     const copy = this.slice(0) //.reverse(); // reverse to fix Satoshi's byte order
-    //     return bufferToHex(copy);
-    // }
+    toHex() {
+        const copy = this.slice(0).reverse(); // reverse to fix Satoshi's byte order
+        return toHex(copy)
+    }
 
     write(writer) {
         writer.writeBytes(this.slice(0));
@@ -252,5 +255,3 @@ export class HexReader extends SerialReader {
         super(Buffer.fromHex(hex))
     }
 }
-
-
