@@ -106,7 +106,6 @@ export class Buffer extends Uint8Array {
         return Utils.toBase64(this)
     }
 
-
     /**
      *
      * Converts a Base64 string into a Buffer
@@ -121,11 +120,23 @@ export class Buffer extends Uint8Array {
 
     /**
      *
-     * Returns a copy of this Buffer in reversed order
+     * Returns a copy of this Buffer in reversed order.
      * @return {Buffer} - The buffer
      *
      */
-    reverse(){
+    reverse() {
         return new this.constructor(super.reverse())
+    }
+
+    /**
+     *
+     * Checks if another buffer is equal to this.
+     *
+     * @param {Buffer} other - The other buffer.
+     * @return {Boolean} - Result of the comparison.
+     *
+     */
+    equals(other) {
+        return Utils.equals(this, other)
     }
 }
