@@ -156,7 +156,6 @@ export class Buffer extends Uint8Array {
      *
      * Converts a Buffer into a Base58 string
      *
-     * @param {Uint8Array} buffer The buffer
      * @return {String} - The Base58 string
      *
      */
@@ -175,4 +174,18 @@ export class Buffer extends Uint8Array {
     static fromBase58(string) {
         return new this.prototype.constructor(Utils.fromBase58(string))
     }
+
+
+    /**
+     *
+     * Returns an Buffer of secure random bytes.
+     *
+     * @param {number} n - The number of bytes to return
+     * @return {Buffer} - The random bytes
+     *
+     */
+    static randomBytes(n) {
+        return Utils.randomBytes(n)
+    }
+
 }

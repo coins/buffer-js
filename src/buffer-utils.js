@@ -175,13 +175,11 @@ function concatTypedArrays(a, b) {
  *
  */
 export function equals(a, b) {
-    const viewA = new Uint8Array(a._buffer || a);
-    const viewB = new Uint8Array(b._buffer || b);
-    if (viewA.byteLength !== viewB.byteLength) return false;
-    for (let i = 0; i < viewA.byteLength; i++) {
-        if (viewA[i] !== viewB[i]) return false;
+    if (a.byteLength !== b.byteLength) return false
+    for (let i = 0; i < a.byteLength; i++) {
+        if (a[i] !== a[i]) return false
     }
-    return true;
+    return true
 }
 
 
@@ -194,11 +192,8 @@ export function equals(a, b) {
  *
  */
 export function randomBytes(n) {
-    return crypto.getRandomValues(new Uint8Array(n));
+    return crypto.getRandomValues(new Uint8Array(n))
 }
 
 
 export { encode as toBase58, decode as fromBase58 } from './base58/base58.js'
-
-
-
