@@ -128,6 +128,17 @@ export class Buffer extends Uint8Array {
         return new this.constructor(super.reverse())
     }
 
+
+    /**
+     *
+     * Returns a shallow copy of a portion of an array into a new array object selected from begin to end (end not included) where begin and end represent the index of items in that array. The original array will not be modified.
+     * @return {Buffer} - The buffer
+     *
+     */
+    slice(begin, end) {
+        return new this.constructor(super.slice(begin, end))
+    }
+
     /**
      *
      * Checks if another buffer is equal to this.
@@ -138,5 +149,30 @@ export class Buffer extends Uint8Array {
      */
     equals(other) {
         return Utils.equals(this, other)
+    }
+
+
+    /**
+     *
+     * Converts a Buffer into a Base58 string
+     *
+     * @param {Uint8Array} buffer The buffer
+     * @return {String} - The Base58 string
+     *
+     */
+    toBase58() {
+        return Utils.toBase58(this)
+    }
+
+    /**
+     *
+     * Converts a Base58 string into a Buffer
+     *
+     * @param {String} string The Base58 string
+     * @return {Buffer} - The buffer
+     *
+     */
+    static fromBase58(string) {
+        return new this.prototype.constructor(Utils.fromBase58(string))
     }
 }

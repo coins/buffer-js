@@ -23,7 +23,7 @@ export function toHex(buffer) {
  */
 export function byteToHex(byte) {
     // convert to hex string and pad a zero if necessary
-    return ('0' + (byte & 0xFF).toString(16)).slice(-2); 
+    return ('0' + (byte & 0xFF).toString(16)).slice(-2);
 }
 
 
@@ -193,6 +193,12 @@ export function equals(a, b) {
  * @return {Uint8Array} - The random bytes
  *
  */
-export function randomBytes(n){
+export function randomBytes(n) {
     return crypto.getRandomValues(new Uint8Array(n));
 }
+
+
+export { encode as toBase58, decode as fromBase58 } from './base58/base58.js'
+
+
+
