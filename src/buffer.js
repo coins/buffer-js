@@ -185,7 +185,7 @@ export class Buffer extends Uint8Array {
      *
      */
     static randomBytes(n) {
-        return Utils.randomBytes(n)
+        return new this.prototype.constructor(Utils.randomBytes(n))
     }
 
 }
