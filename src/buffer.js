@@ -1,4 +1,4 @@
-import * as Utils from './buffer-utils.js';
+import * as Utils from './buffer-utils/buffer-utils.js';
 
 /**
  * Convenience class for byte arrays

@@ -151,13 +151,6 @@ export function toBase64Clean(buffer) {
  *
  */
 export function concat(a, b) {
-    return concatTypedArrays(
-        new Uint8Array(a._buffer || a),
-        new Uint8Array(b._buffer || b)
-    ).buffer;
-}
-
-function concatTypedArrays(a, b) {
     const c = new(a.constructor)(a.length + b.length);
     c.set(a, 0);
     c.set(b, a.length);
@@ -196,4 +189,36 @@ export function randomBytes(n) {
 }
 
 
-export { encode as toBase58, decode as fromBase58 } from './base58/base58.js'
+/**
+ *
+ * Pads an array with zeros to the left up to a given length.
+ *
+ * @param {Uint8Array} buffer - The array
+ * @param {number} n - The number of bytes to return
+ * @return {Uint8Array} - The padded bytes
+ *
+ */
+export function padLeft(buffer, n) {
+    const c = new(buffer.constructor)(n)
+    c.set(buffer, n - buffer.byteLength)
+    return c
+}
+
+
+/**
+ *
+ * Pads an array with zeros to the right up to a given length.
+ *
+ * @param {Uint8Array} buffer - The array
+ * @param {number} n - The number of bytes to return
+ * @return {Uint8Array} - The padded bytes
+ *
+ */
+export function padRight(buffer, n) {
+    const c = new(buffer.constructor)(n)
+    c.set(buffer, 0)
+    return c
+}
+
+
+export { encode as toBase58, decode as fromBase58 } from '../base58/base58.js'

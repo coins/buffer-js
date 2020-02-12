@@ -1,6 +1,5 @@
-import * as Buffer from '../buffer-utils.js';
+import * as Buffer from '../buffer-utils/buffer-utils.js';
 import { SHA256d } from '../../../hash-js/hash.js'
-import { byteToHex, toHex } from '../../../buffer-js/src/buffer-utils.js'
 
 export class SerialBuffer {
 
@@ -168,7 +167,7 @@ export class SerialSHA256d extends SHA256d {
 
     toHex() {
         const copy = this.slice(0).reverse(); // reverse to fix Satoshi's byte order
-        return toHex(copy)
+        return Buffer.toHex(copy)
     }
 
     write(writer) {
@@ -218,7 +217,7 @@ export class HexWriter extends SerialWriter {
     }
 
     writeByte(byte) {
-        this._hex += byteToHex(byte);
+        this._hex += Buffer.byteToHex(byte);
     }
 
     result() {
