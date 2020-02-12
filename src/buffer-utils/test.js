@@ -17,4 +17,10 @@ describe('The buffer-utils library', function() {
         expect(padded).toEqual(expected)
     })
 
+    it('can initialize an array repeating a particular byte', function() {
+        const array = Buffer.repeat(0x5c, 8)
+        const expected = new Uint8Array([0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c, 0x5c])
+        expect(array).toEqual(expected)
+    })
+
 })

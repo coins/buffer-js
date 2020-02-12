@@ -221,4 +221,23 @@ export function padRight(buffer, n) {
 }
 
 
+/**
+ *
+ * Initializes an array of a given length repeating a particular byte.
+ *
+ * @param {number} byte - The byte to repeat
+ * @param {number} n - The number of repetitions
+ * @return {Uint8Array} - The byte array
+ *
+ */
+export function repeat(byte, n) {
+    const result = new Uint8Array(n)
+    for (let i = 0; i < n; i++) {
+        result[i] = byte
+    }
+    return result
+}
+
+
+
 export { encode as toBase58, decode as fromBase58 } from '../base58/base58.js'
