@@ -170,7 +170,7 @@ export function concat(a, b) {
 export function equals(a, b) {
     if (a.byteLength !== b.byteLength) return false
     for (let i = 0; i < a.byteLength; i++) {
-        if (a[i] !== a[i]) return false
+        if (a[i] !== b[i]) return false
     }
     return true
 }
@@ -239,5 +239,22 @@ export function repeat(byte, n) {
 }
 
 
+/**
+ *
+ * XOR 
+ *
+ * @param {Uint8Array} a The first buffer
+ * @param {Uint8Array} b The second buffer
+ * @return {Boolean} Result of the XOR operation
+ *
+ */
+export function xor(a, b) {
+    if (a.byteLength !== b.byteLength) throw TypeError('Lengths must be equal')
+    const c = new Uint8Array(a.byteLength)
+    for (let i = 0; i < a.byteLength; i++) {
+        c[i] = a[i] ^ b[i]
+    }
+    return c
+}
 
 export { encode as toBase58, decode as fromBase58 } from '../base58/base58.js'
