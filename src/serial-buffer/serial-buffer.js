@@ -3,34 +3,58 @@ import { SHA256d } from '../../../hash-js/hash.js'
 
 export class SerialBuffer {
 
+    /**
+     * Read bytes from a reader.
+     * @param {Reader} reader - the Reader to read from.
+     */
     static read(reader) {
         throw 'Error: abstract method'
     }
 
+    /**
+     * Write all bytes to a writer.
+     * @param {Writer} writer - the Writer to write to.
+     */
     write(writer) {
         throw 'Error: abstract method'
     }
 
+    /**
+     * The number of bytes
+     * @param {Number} - The number of bytes.
+     */
     byteLength() {
         throw 'Error: abstract method'
     }
 
+    /**
+     * Write all bytes into a hex string.
+     * @return {string} - the hex string.
+     */
     toHex() {
-        const writer = new HexWriter();
-        this.write(writer);
-        return writer.result();
+        const writer = new HexWriter()
+        this.write(writer)
+        return writer.result()
     }
 
+    /**
+     * Read bytes from a hex string.
+     * @return {SerialBuffer} hexString - the hex string.
+     */
     static fromHex(hexString) {
-        const tx = this.prototype.constructor.read(new HexReader(hexString));
-        return tx;
+        const tx = this.prototype.constructor.read(new HexReader(hexString))
+        return tx
     }
 
+    /**
+     * Writes all bytes into an Uint8Array.
+     * @return {Uint8Array} 
+     */
     toBuffer() {
-        const buffer = new Uint8Array(this.byteLength());
-        const writer = new SerialWriter(buffer);
-        this.write(writer);
-        return writer.result();
+        const buffer = new Uint8Array(this.byteLength())
+        const writer = new SerialWriter(buffer)
+        this.write(writer)
+        return writer.result()
     }
 }
 
@@ -42,14 +66,14 @@ export class Uint extends Number {
     }
 
     write(writer) {
-        const mask = this.constructor.mask;
-        writer.writeBytes(new mask([this]).buffer);
+        const mask = this.constructor.mask
+        writer.writeBytes(new mask([this]).buffer)
     }
 
     static read(reader) {
-        const bytes = reader.readBytes(this.type.byteLength());
-        const mask = this.type.mask;
-        return new this.type(new mask(bytes.buffer)[0]);
+        const bytes = reader.readBytes(this.type.byteLength())
+        const mask = this.type.mask
+        return new this.type(new mask(bytes.buffer)[0])
     }
 
     static get type() {
@@ -63,23 +87,23 @@ export class Uint extends Number {
 
 export class Uint8 extends Uint {
 
-    static get mask() { return Uint8Array; }
+    static get mask() { return Uint8Array }
 
-    static byteLength() { return 1; }
+    static byteLength() { return 1 }
 }
 
 export class Uint16 extends Uint {
 
-    static get mask() { return Uint16Array; }
+    static get mask() { return Uint16Array }
 
-    static byteLength() { return 2; }
+    static byteLength() { return 2 }
 }
 
 export class Uint32 extends Uint {
 
-    static get mask() { return Uint32Array; }
+    static get mask() { return Uint32Array }
 
-    static byteLength() { return 4; }
+    static byteLength() { return 4 }
 }
 
 export class Uint64 extends SerialBuffer {
