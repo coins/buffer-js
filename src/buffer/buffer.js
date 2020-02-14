@@ -1,6 +1,6 @@
 import * as Utils from '../buffer-utils/buffer-utils.js';
 
-/**
+/** 
  * Convenience class for byte arrays
  */
 export class Buffer extends Uint8Array {
