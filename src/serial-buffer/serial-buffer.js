@@ -1,4 +1,4 @@
-import * as Buffer from '../buffer-utils/buffer-utils.js';
+import * as Buffer from '../buffer-utils/buffer-utils.js'
 import { SHA256d } from '../../../hash-js/hash.js'
 
 export class SerialBuffer {
@@ -8,7 +8,7 @@ export class SerialBuffer {
      * @param {Reader} reader - the Reader to read from.
      */
     static read(reader) {
-        throw 'Error: abstract method'
+        throw Error('Abstract method!')
     }
 
     /**
@@ -16,7 +16,7 @@ export class SerialBuffer {
      * @param {Writer} writer - the Writer to write to.
      */
     write(writer) {
-        throw 'Error: abstract method'
+        throw Error('Abstract method!')
     }
 
     /**
@@ -24,7 +24,7 @@ export class SerialBuffer {
      * @param {Number} - The number of bytes.
      */
     byteLength() {
-        throw 'Error: abstract method'
+        throw Error('Abstract method!')
     }
 
     /**
@@ -60,9 +60,9 @@ export class SerialBuffer {
 
 export class Uint extends Number {
 
-    constructor(value) {
-        super(value);
-        this.hex = '0x' + value.toString(16)
+    toHex() {
+        const hex = this.toString(16)
+        return (this % 2 ? '0' : '') + hex
     }
 
     write(writer) {
@@ -116,17 +116,17 @@ export class Uint64 extends SerialBuffer {
     }
 
     write(writer) {
-        writer.writeBytes(new BigInt64Array([this.value]).buffer);
+        writer.writeBytes(new BigInt64Array([this.value]).buffer)
     }
 
     static read(reader) {
-        const bytes = reader.readBytes(this.byteLength()).buffer;
-        return new this(new BigInt64Array(bytes)[0]);
+        const bytes = reader.readBytes(this.byteLength()).buffer
+        return new this(new BigInt64Array(bytes)[0])
     }
 
-    static byteLength() { return 8; }
+    static byteLength() { return 8 }
 
-    byteLength() { return 8; }
+    byteLength() { return 8 }
 }
 
 export class VarInt extends Number {
@@ -151,13 +151,13 @@ export class VarInt extends Number {
 
     write(writer) {
         if (this.uint instanceof Uint16) {
-            writer.writeByte(0xfd);
+            writer.writeByte(0xfd)
         } else if (this.uint instanceof Uint32) {
-            writer.writeByte(0xfe);
+            writer.writeByte(0xfe)
         } else if (this.uint instanceof Uint64) {
-            writer.writeByte(0xff);
+            writer.writeByte(0xff)
         }
-        this.uint.write(writer);
+        this.uint.write(writer)
     }
 
     toHex() {
@@ -168,16 +168,16 @@ export class VarInt extends Number {
 
 
     static read(reader) {
-        const firstByte = Uint8.read(reader);
+        const firstByte = Uint8.read(reader)
         if (firstByte < 0xfd)
-            return new VarInt(firstByte);
+            return new VarInt(firstByte)
         switch (Number(firstByte)) {
             case 0xfd:
-                return new VarInt(Uint16.read(reader));
+                return new VarInt(Uint16.read(reader))
             case 0xfe:
-                return new VarInt(Uint32.read(reader));
+                return new VarInt(Uint32.read(reader))
             case 0xff:
-                return new VarInt(Uint64.read(reader));
+                return new VarInt(Uint64.read(reader))
         }
     }
 
@@ -209,16 +209,16 @@ export class SerialSHA256d extends SHA256d {
 export class SerialWriter {
 
     constructor(buffer, mode) {
-        this._buffer = buffer;
-        this._cursor = 0;
-        this.mode = mode;
+        this._buffer = buffer
+        this._cursor = 0
+        this.mode = mode
     }
 
     writeByte(byte) {
         if (this._cursor >= this._buffer.byteLength)
-            throw new Error('Out of bounds write');
-        this._buffer[this._cursor] = byte;
-        this._cursor += 1;
+            throw Error('Out of bounds write')
+        this._buffer[this._cursor] = byte
+        this._cursor += 1
     }
 
     writeBytes(bytes) {
@@ -229,43 +229,43 @@ export class SerialWriter {
     }
 
     result() {
-        return this._buffer;
+        return this._buffer
     }
 }
 
 export class HexWriter extends SerialWriter {
 
     constructor(buffer, mode) {
-        super(buffer, mode);
-        this._hex = '';
+        super(buffer, mode)
+        this._hex = ''
     }
 
     writeByte(byte) {
-        this._hex += Buffer.byteToHex(byte);
+        this._hex += Buffer.byteToHex(byte)
     }
 
     result() {
-        return this._hex;
+        return this._hex
     }
 }
 
 export class SerialReader {
 
     constructor(buffer) {
-        this._buffer = buffer._buffer || buffer;
+        this._buffer = buffer._buffer || buffer
         this.meta = {};
     }
 
     readBytes(n) {
         if (n > this._buffer.length)
-            throw new Error('Out of bounds read');
+            throw Error('Out of bounds read');
         const res = this._buffer.slice(0, n)
         this._buffer = this._buffer.slice(n);
         return res
     }
 
     isEmpty() {
-        return this._buffer.length == 0;
+        return this._buffer.length === 0
     }
 
     bytesRemaining() {

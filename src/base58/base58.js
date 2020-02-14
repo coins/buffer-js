@@ -1,7 +1,53 @@
-// Credits: https://gist.github.com/bellbind/1f07f94e5ce31557ef23dc2a9b3cc2e1
-// https://en.bitcoin.it/wiki/Base58Check_encoding
-// Bitcoin Base58 encoder/decoder algorithm
-const ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+/**
+ * 
+ * Bitcoin Base58 encoder/decoder algorithm
+ * 
+ * @see https://en.bitcoin.it/wiki/Base58Check_encoding
+ * @author https://gist.github.com/bellbind/1f07f94e5ce31557ef23dc2a9b3cc2e1
+ * 
+ */
+
+
+/**
+ * Encode a byte array into a base58 string.
+ * 
+ * @param  {Uint8Array} byteArray - The byte array to encode.
+ * @param  {string?} table - The alphabet.
+ * @return {string} - The encoded base58 string.
+ */
+export function encode(byteArray, table = ALPHABET) {
+    if (!(byteArray instanceof Uint8Array)) throw TypeError(`must be Uint8Array`);
+    const trails = byteArray.findIndex(n => n !== 0);
+    const head0s = table[0].repeat(trails);
+    if (trails === byteArray.length) return head0s;
+    const num = byteArray.slice(trails).reduce((r, n) => r * 256n + BigInt(n), 0n);
+    return head0s + bigIntToBase58(num, table).join('');
+}
+
+
+/**
+ * Decode a base58 string into a byte array.
+ * 
+ * @param  {string} encoded - The base58 string to decode
+ * @param  {string?} table - The alphabet.
+ * @return {Uint8Array} - The decoded byte array.
+ */
+export function decode(encoded, table = ALPHABET) {
+    const chars = [...encoded];
+    const trails = chars.findIndex(c => c !== table[0]);
+    const head0s = Array(trails).fill(0);
+    if (trails === chars.length) return Uint8Array.from(head0s);
+    const beBytes = [];
+    let num = base58ToBigInt(chars.slice(trails), table);
+    while (num > 0n) {
+        beBytes.unshift(Number(num % 256n));
+        num /= 256n;
+    }
+    return Uint8Array.from(head0s.concat(beBytes));
+}
+
+
+const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
 // Base58 decoder/encoder for BigInt
 function base58ToBigInt(chars, table = ALPHABET) {
@@ -25,28 +71,4 @@ function bigIntToBase58(num, table = ALPHABET) {
         num /= carry;
     }
     return r;
-}
-
-// Base58 decoder/encoder for bytes
-export function decode(str, table = ALPHABET) {
-    const chars = [...str];
-    const trails = chars.findIndex(c => c !== table[0]);
-    const head0s = Array(trails).fill(0);
-    if (trails === chars.length) return Uint8Array.from(head0s);
-    const beBytes = [];
-    let num = base58ToBigInt(chars.slice(trails), table);
-    while (num > 0n) {
-        beBytes.unshift(Number(num % 256n));
-        num /= 256n;
-    }
-    return Uint8Array.from(head0s.concat(beBytes));
-}
-
-export function encode(beBytes, table = ALPHABET) {
-    if (!(beBytes instanceof Uint8Array)) throw TypeError(`must be Uint8Array`);
-    const trails = beBytes.findIndex(n => n !== 0);
-    const head0s = table[0].repeat(trails);
-    if (trails === beBytes.length) return head0s;
-    const num = beBytes.slice(trails).reduce((r, n) => r * 256n + BigInt(n), 0n);
-    return head0s + bigIntToBase58(num, table).join("");
 }

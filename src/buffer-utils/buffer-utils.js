@@ -209,9 +209,9 @@ export function padLeft(buffer, n) {
  *
  * Pads an array with zeros to the right up to a given length.
  *
- * @param {Uint8Array} buffer - The array
- * @param {number} n - The number of bytes to return
- * @return {Uint8Array} - The padded bytes
+ * @param {Uint8Array} buffer - The array.
+ * @param {number} n - The number of bytes to return.
+ * @return {Uint8Array} - The padded bytes.
  *
  */
 export function padRight(buffer, n) {
@@ -225,9 +225,9 @@ export function padRight(buffer, n) {
  *
  * Initializes an array of a given length repeating a particular byte.
  *
- * @param {number} byte - The byte to repeat
- * @param {number} n - The number of repetitions
- * @return {Uint8Array} - The byte array
+ * @param {number} byte - The byte to repeat.
+ * @param {number} n - The number of repetitions.
+ * @return {Uint8Array} - The byte array.
  *
  */
 export function repeat(byte, n) {
@@ -241,11 +241,11 @@ export function repeat(byte, n) {
 
 /**
  *
- * XOR 
+ * XOR two byte arrays.
  *
- * @param {Uint8Array} a The first buffer
- * @param {Uint8Array} b The second buffer
- * @return {Boolean} Result of the XOR operation
+ * @param {Uint8Array} a The first byte array.
+ * @param {Uint8Array} b The second byte array.
+ * @return {Boolean} Result of the XOR operation.
  *
  */
 export function xor(a, b) {
