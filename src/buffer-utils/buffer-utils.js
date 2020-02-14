@@ -147,7 +147,7 @@ export function toBase64Clean(buffer) {
  *
  * @param {Uint8Array} a The first buffer
  * @param {Uint8Array} b The second buffer
- * @return {ArrayBuffer} The concatenated buffer
+ * @return {Uint8Array} The concatenated buffer
  *
  */
 export function concat(a, b) {
@@ -258,3 +258,6 @@ export function xor(a, b) {
 }
 
 export { encode as toBase58, decode as fromBase58 } from '../base58/base58.js'
+
+
+// TODO: return ArrayBuffer instead of Uint8Array

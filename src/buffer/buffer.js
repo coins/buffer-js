@@ -43,7 +43,7 @@ export class Buffer extends Uint8Array {
      * 
      */
     static fromHex(hexString) {
-        return new this.prototype.constructor(Utils.fromHex(hexString))
+        return new this.prototype.constructor(Utils.fromHex(hexString).buffer)
     }
 
     /**
@@ -64,7 +64,7 @@ export class Buffer extends Uint8Array {
      * 
      */
     static fromBigInt(integer) {
-        return new this.prototype.constructor(Utils.fromBigInt(integer))
+        return new this.prototype.constructor(Utils.fromBigInt(integer).buffer)
     }
 
     /**
@@ -125,7 +125,7 @@ export class Buffer extends Uint8Array {
      *
      */
     reverse() {
-        return new this.constructor(super.reverse())
+        return new this.constructor(super.reverse().buffer) 
     }
 
 
@@ -136,7 +136,7 @@ export class Buffer extends Uint8Array {
      *
      */
     slice(begin, end) {
-        return new this.constructor(super.slice(begin, end))
+        return new this.constructor(super.slice(begin, end).buffer) 
     }
 
     /**
