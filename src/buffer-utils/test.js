@@ -1,6 +1,5 @@
 import * as Buffer from './buffer-utils.js'
 
-// TODO: add more test vectors from https://github.com/bitcoin/bitcoin/blob/master/src/test/base58_tests.cpp
 describe('The buffer-utils library', function() {
 
     it('can pad an Uint8Array with zeros on the left', function() {
