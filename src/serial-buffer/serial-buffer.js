@@ -1,5 +1,4 @@
 import * as Buffer from '../buffer-utils/buffer-utils.js'
-import { SHA256d } from '../../../hash-js/hash.js'
 
 export class SerialBuffer {
 
@@ -183,28 +182,7 @@ export class VarInt extends Number {
 
 }
 
-export class SerialSHA256d extends SHA256d {
 
-    byteLength() {
-        return this.constructor.byteLength();
-    }
-
-    toHex() {
-        const copy = this.slice(0).reverse(); // reverse to fix Satoshi's byte order
-        return Buffer.toHex(copy)
-    }
-
-    write(writer) {
-        writer.writeBytes(this.slice(0));
-    }
-
-    static read(reader) {
-        const hash = reader.readBytes(this.byteLength());
-        return new SerialSHA256d(hash);
-    }
-
-    static byteLength() { return 32; }
-}
 
 export class SerialWriter {
 
