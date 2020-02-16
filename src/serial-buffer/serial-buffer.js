@@ -4,7 +4,8 @@ export class SerialBuffer {
 
     /**
      * Read bytes from a reader.
-     * @param {Reader} reader - the Reader to read from.
+     * @param {Reader} reader - The Reader to read from.
+     * @return {SerialBuffer} - The read SerialBuffer instance.
      */
     static read(reader) {
         throw Error('Abstract method!')
@@ -12,7 +13,7 @@ export class SerialBuffer {
 
     /**
      * Write all bytes to a writer.
-     * @param {Writer} writer - the Writer to write to.
+     * @param {SerialWriter} writer - the Writer to write to.
      */
     write(writer) {
         throw Error('Abstract method!')
@@ -41,8 +42,8 @@ export class SerialBuffer {
      * @return {SerialBuffer} hexString - the hex string.
      */
     static fromHex(hexString) {
-        const tx = this.prototype.constructor.read(new HexReader(hexString))
-        return tx
+        const object = this.prototype.constructor.read(new HexReader(hexString))
+        return object
     }
 
     /**
@@ -57,6 +58,11 @@ export class SerialBuffer {
     }
 }
 
+/**
+ * Abstract base class for Unsigned integers like Uint8, Uint16, Uint32, etc.
+ * @class
+ * @abstract
+ */
 export class Uint extends Number {
 
     toHex() {
@@ -84,6 +90,9 @@ export class Uint extends Number {
     }
 }
 
+/**
+ * Unsigned integer of 1 bytes. 
+ */
 export class Uint8 extends Uint {
 
     static get mask() { return Uint8Array }
@@ -91,6 +100,9 @@ export class Uint8 extends Uint {
     static byteLength() { return 1 }
 }
 
+/**
+ * Unsigned integer of 2 bytes. 
+ */
 export class Uint16 extends Uint {
 
     static get mask() { return Uint16Array }
@@ -98,6 +110,9 @@ export class Uint16 extends Uint {
     static byteLength() { return 2 }
 }
 
+/**
+ * Unsigned integer of 4 bytes. 
+ */
 export class Uint32 extends Uint {
 
     static get mask() { return Uint32Array }
@@ -105,7 +120,16 @@ export class Uint32 extends Uint {
     static byteLength() { return 4 }
 }
 
+/**
+ * Unsigned integer of 8 bytes. 
+ */
 export class Uint64 extends SerialBuffer {
+
+    /**
+     * The integer to represent.
+     * @type {Number}
+     */
+    value
 
     constructor(value) {
         super()
@@ -128,6 +152,9 @@ export class Uint64 extends SerialBuffer {
     byteLength() { return 8 }
 }
 
+/**
+ * Unsigned integer of variable length.
+ */
 export class VarInt extends Number {
 
     constructor(uint) {
