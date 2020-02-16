@@ -71,7 +71,7 @@ export class Uint extends Number {
         if (hex.length % 2) hex = '0' + hex
         // pad with zeros in little endian            
         while (hex.length < this.byteLength() * 2) {
-            hex += '0'
+            hex = hex + '0'
         }
         return hex
     }
