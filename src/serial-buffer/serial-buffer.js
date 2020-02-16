@@ -66,8 +66,14 @@ export class SerialBuffer {
 export class Uint extends Number {
 
     toHex() {
-        const hex = this.toString(16)
-        return (this % 2 ? '0' : '') + hex
+        let hex = this.toString(16)
+        // pad to full byte
+        if (hex.length % 2) hex = '0' + hex
+        // pad with zeros in little endian            
+        while (hex.length < this.byteLength() * 2) {
+            hex += '0'
+        }
+        return hex
     }
 
     write(writer) {

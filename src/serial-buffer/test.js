@@ -1,4 +1,4 @@
-import { Uint64 } from './serial-buffer.js'
+import { Uint32, Uint64 } from './serial-buffer.js'
 
 describe('A Uint64', function() {
 
@@ -20,4 +20,15 @@ describe('A Uint64', function() {
         const result = new Uint64(example)
         expect(result.toHex()).toBe('4baf210000000000')
     })
+})
+
+
+describe('A Uint32', function() {
+
+    it('can be serialized and deserialized', function() {
+        const example = new Uint32(1)
+        const result = example.toHex()
+        expect(result).toBe('01000000')
+    })
+
 })
