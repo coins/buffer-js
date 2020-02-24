@@ -21,7 +21,7 @@ export class SerialBuffer {
 
     /**
      * The number of bytes
-     * @param {Number} - The number of bytes.
+     * @return {Number} - The number of bytes.
      */
     byteLength() {
         throw Error('Abstract method!')
