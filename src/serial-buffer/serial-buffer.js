@@ -4,7 +4,7 @@ export class SerialBuffer {
 
     /**
      * Read bytes from a reader.
-     * @param {Reader} reader - The Reader to read from.
+     * @param {SerialReader} reader - The Reader to read from.
      * @return {SerialBuffer} - The read SerialBuffer instance.
      */
     static read(reader) {
@@ -135,7 +135,7 @@ export class Uint64 extends SerialBuffer {
      * The integer to represent.
      * @type {Number}
      */
-    value
+    // value
 
     constructor(value) {
         super()
