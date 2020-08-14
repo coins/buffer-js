@@ -140,7 +140,6 @@ export function toBase64Clean(buffer) {
     return Buffer.toBase64(buffer).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
 }
 
-
 /**
  *
  * Concatenates two buffers
@@ -151,7 +150,7 @@ export function toBase64Clean(buffer) {
  *
  */
 export function concat(a, b) {
-    const c = new(a.constructor)(a.length + b.length);
+    const c = new(a.constructor)(a.length + b.length); // FIXME: using a.constructor can lead to incorrect types. E.g. a Buffer of subtype SHA256 with 200 bytes...
     c.set(a, 0);
     c.set(b, a.length);
     return c;
@@ -178,7 +177,7 @@ export function equals(a, b) {
 
 /**
  *
- * Returns an array of secure random bytes.
+ * Returns a buffer of secure random bytes.
  *
  * @param {number} n - The number of bytes to return
  * @return {Uint8Array} - The random bytes
@@ -191,11 +190,11 @@ export function randomBytes(n) {
 
 /**
  *
- * Pads an array with zeros to the left up to a given length.
+ * Pads an buffer with zeros to the left up to a given length.
  *
- * @param {Uint8Array} buffer - The array
- * @param {number} n - The number of bytes to return
- * @return {Uint8Array} - The padded bytes
+ * @param {Uint8Array} buffer    The buffer
+ * @param {number} n             The number of bytes to return
+ * @return {Uint8Array}          The padded bytes
  *
  */
 export function padLeft(buffer, n) {
@@ -209,9 +208,9 @@ export function padLeft(buffer, n) {
  *
  * Pads an array with zeros to the right up to a given length.
  *
- * @param {Uint8Array} buffer - The array.
- * @param {number} n - The number of bytes to return.
- * @return {Uint8Array} - The padded bytes.
+ * @param {Uint8Array} buffer    The array.
+ * @param {number} n             The number of bytes to return.
+ * @return {Uint8Array}          The padded bytes.
  *
  */
 export function padRight(buffer, n) {
@@ -260,4 +259,13 @@ export function xor(a, b) {
 export { encode as toBase58, decode as fromBase58 } from '../base58/base58.js'
 
 
-// TODO: return ArrayBuffer instead of Uint8Array
+
+/** 
+ * Convert a buffer to a binary string.
+ * 
+ * @param  {Uint8Array} buffer The buffer to convert.
+ * @return {String}     The binary string.
+ */
+export function toBinary(buffer) {
+    return buffer.reduce((str, byte) => str + byte.toString(2).padStart(8, '0'), '')
+}

@@ -76,7 +76,7 @@ export class Buffer extends Uint8Array {
      * @return {String} - The Unicode string
      *
      */
-    toUnicode(buffer, encoding ='utf-8' ) {
+    toUnicode(buffer, encoding = 'utf-8') {
         return Utils.toUnicode(this, encoding)
     }
 
@@ -125,7 +125,7 @@ export class Buffer extends Uint8Array {
      *
      */
     reverse() {
-        return new this.constructor(super.reverse().buffer) 
+        return new this.constructor(super.reverse().buffer)
     }
 
 
@@ -140,7 +140,7 @@ export class Buffer extends Uint8Array {
      *
      */
     slice(begin, end) {
-        return new this.constructor(super.slice(begin, end).buffer) 
+        return new this.constructor(super.slice(begin, end).buffer)
     }
 
     /**
@@ -158,13 +158,23 @@ export class Buffer extends Uint8Array {
 
     /**
      *
-     * Converts a Buffer into a Base58 string
+     * Converts this Buffer into a Base58 string
      *
      * @return {String} - The Base58 string
      *
      */
     toBase58() {
         return Utils.toBase58(this)
+    }
+
+
+    /** 
+     * Convert this buffer into a binary string.
+     * 
+     * @return {String}     The binary string.
+     */
+    toBinary() {
+        return Utils.toBinary(this)
     }
 
     /**
