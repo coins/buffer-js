@@ -8,7 +8,7 @@ export class Buffer extends Uint8Array {
     /**
      * 
      * Creates a Buffer.
-     * @param {number|Array<number>} elements - The BigInt to convert.
+     * @param {Number|Array<Number>} elements - a byte array or array length.
      * 
      */
     constructor(elements) {
@@ -18,7 +18,7 @@ export class Buffer extends Uint8Array {
     /**
      * 
      * The number of bytes
-     * @return {number} - The byte size.
+     * @return {Number} - The byte size.
      * 
      */
     size() {
@@ -28,7 +28,7 @@ export class Buffer extends Uint8Array {
     /**
      * 
      * Converts this to a hex string.
-     * @return {string} - The converted hex string.
+     * @return {String} - The converted hex string.
      * 
      */
     toHex() {
@@ -38,7 +38,7 @@ export class Buffer extends Uint8Array {
     /**
      * 
      * Converts a hex string to a Buffer.
-     * @param {string} integer - The hex string to convert.
+     * @param {String} integer - The hex string to convert.
      * @return {Buffer} - The converted Buffer.
      * 
      */
@@ -72,11 +72,11 @@ export class Buffer extends Uint8Array {
      * Converts a Buffer into a Unicode string
      *
      * @param {Uint8Array} buffer - The buffer
-     * @param {string} [encoding='utf-8'] - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
+     * @param {String?} encoding - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
      * @return {String} - The Unicode string
      *
      */
-    toUnicode(buffer, encoding) {
+    toUnicode(buffer, encoding ='utf-8' ) {
         return Utils.toUnicode(this, encoding)
     }
 
@@ -84,8 +84,8 @@ export class Buffer extends Uint8Array {
      *
      * Converts a Unicode string into a Buffer
      *
-     * @param {String} string The hex string
-     * @param {string} [encoding='utf-8'] - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
+     * @param {String} string - The hex string
+     * @param {String?} [encoding='utf-8'] - a specific text encoding, such as UTF-8, ISO-8859-2, KOI8-R, GBK, etc.
      * @return {Buffer} - The buffer
      *
      */
@@ -131,7 +131,11 @@ export class Buffer extends Uint8Array {
 
     /**
      *
-     * Returns a shallow copy of a portion of an array into a new array object selected from begin to end (end not included) where begin and end represent the index of items in that array. The original array will not be modified.
+     * Returns a shallow copy of a portion of an array into a new array object
+     * selected from begin to end (end not included) where begin 
+     * and end represent the index of items in that array. 
+     * The original array will not be modified.
+     * 
      * @return {Buffer} - The buffer
      *
      */
@@ -178,9 +182,9 @@ export class Buffer extends Uint8Array {
 
     /**
      *
-     * Returns an Buffer of secure random bytes.
+     * Returns a Buffer of secure random bytes.
      *
-     * @param {number} n - The number of bytes to return
+     * @param {Number} n - The number of bytes to return
      * @return {Buffer} - The random bytes
      *
      */
