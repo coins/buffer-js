@@ -84,7 +84,7 @@ export class Uint extends Number {
     static read(reader) {
         const bytes = reader.readBytes(this.type.byteLength())
         const mask = this.type.mask
-        return new this.type(new mask(bytes.buffer)[0])
+        return new this.type(new mask(bytes.buffer || bytes)[0])
     }
 
     static get type() {
